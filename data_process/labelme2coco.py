@@ -28,6 +28,7 @@ class labelme2coco(object):
 
     def data_transfer(self):
         for num, json_file in enumerate(self.labelme_json):
+            num = num + 1
             with open(json_file, "r") as fp:
                 data = json.load(fp)
                 self.images.append(self.image(data, num))
