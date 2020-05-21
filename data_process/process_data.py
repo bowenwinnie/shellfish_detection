@@ -6,6 +6,7 @@ import cv2
 import argparse
 dir_path = '/Users/sunbowen/Desktop/images/project/tuatua/resized_tua'
 # des_path = '/Users/sunbowen/Desktop/images/project/mussel/resized_mus'
+destination = ''
 
 
 # Rename files from .jpeg to .jpg
@@ -67,6 +68,7 @@ def resize_img():
             len(fnames), raw_dir, target_size
         )
     )
+
     for i, fname in enumerate(fnames):
         print(".", end="", flush=True)
         img = cv2.imread(fname)
@@ -83,5 +85,5 @@ def resize_img():
 
 if __name__ == "__main__":
     # allocate_data()
-    rename()
-    # resize_img()
+    # rename()
+    resize_img()

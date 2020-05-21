@@ -2,3 +2,9 @@
 /Detectron2-repo
 ./idea
 /data/logs
+/webupload/public/img
+/data
+/webupload/.idea/
+/train_result/
+/predict_old.py
+/output/

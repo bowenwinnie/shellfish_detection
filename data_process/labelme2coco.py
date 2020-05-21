@@ -1,14 +1,13 @@
 import os
 import argparse
 import json
-
-from labelme import utils
 import numpy as np
 import glob
 import PIL.Image
+from labelme import utils
 
 
-class labelme2coco(object):
+class Labelme2coco(object):
     def __init__(self, labelme_json=[], save_json_path="./coco.json"):
         """
         :param labelme_json: the list of all labelme json file paths
@@ -146,8 +145,6 @@ class labelme2coco(object):
 
 
 if __name__ == "__main__":
-    import argparse
-
     parser = argparse.ArgumentParser(
         description="labelme annotation to coco data json file."
     )
