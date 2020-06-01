@@ -7,3 +7,5 @@
 /train_result/
 /predict_old.py
 /output/
+/detectron2-repo
+/result

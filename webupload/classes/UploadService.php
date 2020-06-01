@@ -54,7 +54,7 @@ class UploadService extends ServiceBase
 
             if (move_uploaded_file($_FILES["uploadedFile"]["tmp_name"], $target_file)) {
                 // Call script to run detection
-                $prediction_script = __DIR__ . '/../../pdtry.py';
+                $prediction_script = __DIR__ . '/../../predict.py';
 
                 $command = escapeshellcmd('python3 ' . $prediction_script . ' --input ' . $target_file . ' --output ' . $target_dir . ' --web 1');
                 $predicted_img_path = shell_exec($command);

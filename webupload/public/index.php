@@ -50,14 +50,14 @@ if (isset($_POST['submit'])) {
 </head>
 <body>
 <div class="w3-content" style="max-width:1400px;">
-<header class="w3-container w3-center w3-padding-48 w3-light-grey">
+<header class="w3-container w3-center w3-padding-36 w3-light-grey">
     <h1 class="w3-xxxlarge"><b>Shellfish Detection</b></h1>
 </header>
 <div class="w3-sand w3-large">
     <div class="w3-container">
-        <div class="w3-content w3-padding-64" style="max-width:700px;">
+        <div class="w3-content w3-padding-16" style="max-width:700px; height:100px;">
             <form method="POST" enctype="multipart/form-data" id="upload_form" class="form-horizontal">
-                <div class="form-group" style="text-align: center">
+                <div class="form-group" style="text-align: center" style="display:inline-block">
                     <label class="control-label col-sm-2" for="email">Image:</label>
                     <div class="col-sm-4">
                         <input type="file" id="upload_file" name="uploadedFile" required>
@@ -74,7 +74,7 @@ if (isset($_POST['submit'])) {
         <div id="page_content_thanks" class="w3-content w3-center">
             <?php
             if (isset($predictedImage)) {
-                echo $predictedImage;
+//                 echo $predictedImage;
                 echo '<img src="' . $predictedImage . '" width="100%" height="100%">';
             }
             ?>

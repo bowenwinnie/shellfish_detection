@@ -14,6 +14,7 @@ import time
 import glob
 import tqdm
 from detectron2.data import DatasetCatalog, MetadataCatalog
+from collections import Counter
 from detectron2.data.datasets import register_coco_instances
 import argparse
 
@@ -28,6 +29,7 @@ TRAIN_PATH = dir_path + "/data/aug_val"
 # MODEL_WEIGHTS = "/Users/sunbowen/Desktop/shellfish_detection/data/logs/model_final.pth"
 MODEL_WEIGHTS = dir_path + "/output/model_final.pth"
 
+
 def setup_cfg(args):
     # load config from file and command-line arguments
     # # Create config
@@ -39,6 +41,7 @@ def setup_cfg(args):
     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = args.confidence_threshold
     cfg.MODEL.PANOPTIC_FPN.COMBINE.INSTANCES_CONFIDENCE_THRESH = args.confidence_threshold
     cfg.MODEL.WEIGHTS = MODEL_WEIGHTS
+    cfg.DATASETS.TEST = ("shellfish",)
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 3
 
     cfg.freeze()
@@ -85,6 +88,24 @@ def get_parser():
     return parser
 
 
+class ShellfishVisualizer(Visualizer):
+    # Draw shellfish classes and count on images
+    def draw_class_count(self, predictions):
+        classes = predictions.pred_classes if predictions.has("pred_classes") else None
+        class_names = self.metadata.get("thing_classes", None)
+        if classes is not None and class_names is not None and len(class_names) > 1:
+            labels = [class_names[i] for i in classes]
+            counts = Counter(labels)
+            text_string = ''
+            x = self.output.height * 0.02
+            y = self.output.width * 0.02
+            for key in counts:
+                text_string += str(key) + ': ' + str(counts[key]) + ' ' if text_string == '' else '\n' + str(
+                    key) + ': ' + str(counts[key]) + ' '
+
+            self.draw_text(text_string, (x, y), horizontal_alignment='left', color='green')
+
+
 if __name__ == "__main__":
     mp.set_start_method("spawn", force=True)
     args = get_parser().parse_args()
@@ -95,9 +116,12 @@ if __name__ == "__main__":
     cfg = setup_cfg(args)
 
     # register dataset
-    register_coco_instances("shellfish", {}, TRAIN_JSON, TRAIN_PATH)
-    shellfish_metadata = MetadataCatalog.get("shellfish")
-    dataset_dicts = DatasetCatalog.get("shellfish")
+    # register_coco_instances("shellfish", {}, TRAIN_JSON, TRAIN_PATH)
+    # shellfish_metadata = MetadataCatalog.get("shellfish")
+
+    # Define the target shellfish classes
+    target_classes = ['cockle', 'tuatua', 'mussel']
+    shellfish_metadata = MetadataCatalog.get(cfg.DATASETS.TEST[0]).set(thing_classes=target_classes)
 
     if args.input:
         if len(args.input) == 1:

@@ -12,7 +12,7 @@ import pycocotools.mask as mask_util
 import torch
 from fvcore.common.file_io import PathManager
 from matplotlib.backends.backend_agg import FigureCanvasAgg
-from PIL import Image, ImageFont, ImageDraw
+from PIL import Image
 from collections import Counter
 
 from detectron2.structures import BitMasks, Boxes, BoxMode, Keypoints, PolygonMasks, RotatedBoxes
@@ -377,8 +377,8 @@ class Visualizer:
             alpha=alpha,
         )
 
-        # draw object counts
-        self.draw_count(classes, self.metadata.get("thing_classes", None))
+        # # draw object counts
+        # self.draw_count(classes, self.metadata.get("thing_classes", None))
 
         return self.output
 
@@ -387,8 +387,8 @@ class Visualizer:
             labels = [class_names[i] for i in classes]
             counts = Counter(labels)
             text_string = ''
-            x = self.output.height * 0.05
-            y = self.output.width * 0.05
+            x = self.output.height * 0.02
+            y = self.output.width * 0.02
             for key in counts:
                 text_string += str(key) + ': ' + str(counts[key]) + ' ' if text_string == '' else '\n' + str(key) + ': ' + str(counts[key]) + ' '
 
