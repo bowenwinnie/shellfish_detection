@@ -9,3 +9,4 @@
 /output/
 /detectron2-repo
 /result
+/app/model/model_final.pth
