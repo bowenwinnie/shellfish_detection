@@ -9,12 +9,15 @@ from detectron2.utils.visualizer import Visualizer, ColorMode
 from detectron2.data import DatasetCatalog, MetadataCatalog
 from detectron2.engine import DefaultPredictor
 from detectron2 import model_zoo
+import time
 
 
 # Define the target shellfish classes
 target_classes = ['cockle', 'mussel', 'tuatua']
 
-MODEL_WEIGHTS = "model/model_final.pth"
+MODEL_WEIGHTS = "model/model_final_1106.pth"
+CONFIG_FILE = "COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml"
+
 # Remove dropdown menu
 hide_menu_style = """
         <style>
@@ -26,8 +29,8 @@ st.markdown(hide_menu_style, unsafe_allow_html=True)
 
 def setup_cfg():
     cfg = get_cfg()
-    cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml"))
-    # cfg.merge_from_file("/Users/sunbowen/Desktop/shellfish_detection/app/model/final_mask_rcnn_R_101_FPN_3x.yaml")
+    cfg.merge_from_file(model_zoo.get_config_file(CONFIG_FILE))
+
     cfg.MODEL.DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
     cfg.MODEL.WEIGHTS = MODEL_WEIGHTS
@@ -80,7 +83,7 @@ def run_inference(img):
     v = ShellfishVisualizer(img[:, :, ::-1],
                             metadata=shellfish_metadata,
                             scale=1,
-                            instance_mode=ColorMode.IMAGE)
+                            instance_mode=ColorMode.IMAGE_BW)
 
     # Draw shellfish classes and counts on the top left of the image
     v.draw_class_count(outputs["instances"].to("cpu"))
@@ -115,6 +118,7 @@ def main():
                 # Get and print predicted classes
                 classes = np.array(instances.pred_classes)
                 predicted_classes = [target_classes[i] for i in classes]
+
                 st.markdown('<style>p{color:#8A2BE2}</style>', unsafe_allow_html=True)
                 st.write("Detected Shellfish:")
 
